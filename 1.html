@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра в города против робота на JavaScript</title>
+</head>
+<body>
+    <input id="field">
+    <button id="play">играть</button>
+    <div id="message"></div>
+
+    <script>
+
+        let field   = document.querySelector('#field');
+        let message = document.querySelector('#message');
+        let pressBtn = document.querySelector('#play');
+        //массив городов робота
+        let robotArr = ['milano','nerlin','orlean','neapol','torino','lissabon'];
+        //массив городов пользователя и робота
+        let commonArr = [];
+        let userWord;
+        let userWordLetter;
+
+        //генерация рандомных городов из массива        
+        function getRandomNumber(min, max) {
+        let rand = Math.floor(Math.random() * (max - min) + min);
+        if(commonArr.indexOf(robotArr[rand]) == -1){
+            commonArr.push(robotArr[rand]);
+        }
+        console.log('Робот ввел слово: '+ robotArr[rand]);
+        console.log('Введите слово на букву '+ robotArr[rand].substr(robotArr[rand].length-1));
+        }
+        getRandomNumber(0,5);
+
+    
+      //обработчик клика
+        function clickHandler(e){
+        e.preventDefault();
+        console.log('Вы ввели слово: '+ field.value);
+        if(commonArr.indexOf(field.value) == -1){
+            commonArr.push(field.value);
+            check();
+        }
+        else{
+            console.log('Это слово уже было')
+        }
+};
+
+
+        function check(){
+            console.log(commonArr)
+            let robotWord = commonArr[commonArr.length-2];
+            let robotWordLetter = robotWord.substr(robotWord.length-1);
+
+            userWord = commonArr[commonArr.length-1];
+            userWordLetter = userWord[0];
+
+            if(robotWordLetter == userWordLetter){
+                console.log('Отлично, теперь ход робота ');
+                findRobotWord();
+                console.log(commonArr)
+            }
+            else{
+                console.log('слово не на нужную букву, или оно уже было');
+                console.log(commonArr)
+            }
+        }
+
+
+        function findRobotWord(){
+            for(let i=0; i<robotArr.length; i++){
+                let lastUserLetter = userWord.substr(userWord.length-1);
+                if(robotArr[i][0] == lastUserLetter && commonArr.indexOf(robotArr[i]) == -1){
+                    commonArr.push(robotArr[i])
+                    console.log('Робот ввел слово: '+ robotArr[i] + ' Вам на букву '+ robotArr[i].substr(robotArr[i].length-1));
+                    break;
+                }
+            }
+        }
+
+    pressBtn.addEventListener('click', clickHandler);
+        </script>
+    
+</body>
+</html>
